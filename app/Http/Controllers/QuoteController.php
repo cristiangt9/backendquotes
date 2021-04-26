@@ -53,7 +53,9 @@ class QuoteController extends Controller
      */
     public function show(Quote $quote)
     {
-        //
+        $quote = Quote::with('comments')->find($quote->id);
+
+        return $this->defaultJsonResponse(true, "Quote Found", "The Quote with id: {$quote->id} has found", null, $quote );
     }
 
     /**

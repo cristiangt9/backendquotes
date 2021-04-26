@@ -19,14 +19,13 @@ class QuotesTest extends TestCase
         $this->seed();
         //cuando tengo la base cargada con 2 quotes con 4 comentaros cada uno, y hago un get al index
         $response = $this->get('/quotes');
-        $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {
             $json
                 ->has('success')
                 ->has('title')
                 ->has('message')
                 ->has('messages')
-                ->has('code')
+                ->where('code', 200)
                 ->has('data', 2)
                 ->has('data', function (AssertableJson $jsonData) {
                     $jsonData->has('0.comments', 4)
@@ -48,7 +47,6 @@ class QuotesTest extends TestCase
                 "text" => "This is a quote3"
             ]
         );
-        $response->assertStatus(201);
         $response->assertJson(function (AssertableJson $json) {
             $json
                 ->has('success')
@@ -69,24 +67,24 @@ class QuotesTest extends TestCase
     /**
      * @test
      */
-    public function whenShowWasRequiredReturnTheQuoteCorrectWithComments() //store
+    public function whenShowWasRequiredReturnTheQuoteCorrectWithComments() //show
     {
         $this->seed();
-        $response = $this->post('/quotes/1');
-        $response->assertStatus(201);
+        $response = $this->get('/quotes/1');
         $response->assertJson(function (AssertableJson $json) {
             $json
                 ->has('success')
                 ->has('title')
                 ->has('message')
                 ->has('messages')
-                ->has('code')
+                ->where('code', 200)
                 ->has('data', function ($jsonData) {
                     $jsonData
-                        ->has("id", 1)
-                        ->has("text", "This is a quote1")
-                        ->has("author", "Author1 Example")
-                        ->has("comments", 4);
+                        ->where("id", 1)
+                        ->where("text", "This is a quote0")
+                        ->where("author", "Author0 Example")
+                        ->has("comments", 4)
+                        ->etc();
                 });
         });
     }
