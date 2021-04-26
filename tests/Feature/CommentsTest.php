@@ -13,7 +13,7 @@ class CommentsTest extends TestCase
     /**
      * @test
      */
-    public function whenIndexWasRequiredGetAllTheComments()
+    public function whenIndexWasRequiredGetAllTheComments() //index
     {
         $this->seed();
         $response = $this->get('/comments?quote_id=1');
@@ -30,34 +30,30 @@ class CommentsTest extends TestCase
     /**
      * @test
      */
-    public function whenACommentWasSendedSaveTheCommentAndReturnAllTheCommentsOfTheQuote()
+    public function whenACommentWasSendedSaveTheCommentAndReturnAllTheCommentsOfTheQuote() //store
     {
         $this->seed();
         $response = $this->post(
             '/comments',
             [
-                'comment' =>
-                [
-                    "text" => "this is a comment4",
-                    "quote_id" => "1"
-                ]
+                "text" => "this is a comment4",
+                "quote_id" => "1"
             ]
         );
-        $response->assertStatus(201);
         $response->assertJson(function (AssertableJson $json) {
             $json
                 ->has('success')
-                ->has('title')
-                ->has('message')
-                ->has('messages')
+                ->where('code', 201)
                 ->has('data', function ($jsonData) {
                     $jsonData->has('comments', 5)
-                    ->has('comments.4', function ($jsonComment) {
-                        $jsonComment->has("id")
-                                    ->where("text", "this is a comment4")
-                                    ->where("quote_id", "1");
-                    });
-                });
+                        ->has('comments.4', function ($jsonComment) {
+                            $jsonComment->has("id")
+                                ->where("text", "this is a comment4")
+                                ->where("quote_id", 1)
+                                ->etc();
+                        });
+                })
+                ->etc();
         });
     }
 }

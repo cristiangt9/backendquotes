@@ -33,7 +33,26 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            "text" => "required|max:200",
+            "quote_id" => "required|exists:quotes,id"
+        ];
+
+        $validator = $this->validateRequestJsonFunction($request, $rules);
+        if(!$validator->validated) {
+            return $this->defaultJsonResponseWithoutData(false, "Incorrect Data", "One o more fields are incorrect", $validator->error, 422);
+        }
+
+        $comment = new Comment();
+        $comment->text = $request->text;
+        $comment->quote_id = $request->quote_id;
+        if($comment->save()) {
+            $comments = Comment::where("quote_id", $request->quote_id)->get();
+            return $this->defaultJsonResponse(true, "Comment created", "the comment has created successfully", null, ['comments' => $comments], 201);
+        }
+        return $this->defaultJsonResponseWithoutData(false, "Error during creation", "please contact with support", null, 422);
+
+
     }
 
     /**

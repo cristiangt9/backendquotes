@@ -42,7 +42,7 @@ class QuoteController extends Controller
             $quote = Quote::with('comments')->find($quote->id);
             return $this->defaultJsonResponse(true, "Quote Created", "The quote has created successfully",[], $quote, 201);
         };
-        
+        return $this->defaultJsonResponseWithoutData(false, "Error during creation", "please contact with support", null, 422);
     }
 
     /**
