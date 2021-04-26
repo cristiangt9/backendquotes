@@ -30,7 +30,7 @@ class QuotesTest extends TestCase
                 ->has('data', 2)
                 ->has('data', function (AssertableJson $jsonData) {
                     $jsonData->has('0.comments', 4)
-                    ->has('1.comments', 4);
+                        ->has('1.comments', 4);
                 });
         });
     }
@@ -55,13 +55,14 @@ class QuotesTest extends TestCase
                 ->has('title')
                 ->has('message')
                 ->has('messages')
-                ->has('code')
+                ->where('code', 201)
                 ->has('data', function ($jsonData) {
                     $jsonData
-                        ->has("id", 3)
-                        ->has("text", "This is a quote3")
-                        ->has("author", "Author3 Example")
-                        ->has("comments");
+                        ->where("id", 3)
+                        ->where("text", "This is a quote3")
+                        ->where("author", "Author3 Example")
+                        ->has("comments", 0)
+                        ->etc();
                 });
         });
     }

@@ -26,7 +26,23 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            "text" => "required|max:300",
+            "author" => "required|max:30"
+        ];
+        
+        $validator = $this->validateRequestJsonFunction( $request, $rules );
+        if(!$validator->validated) {
+            return $this->defaultJsonResponseWithoutData(false, "Incorrect Data", "one o more values are incorrect", $validator->errors, 422);
+        }
+        $quote = new Quote();
+        $quote->text = $request->text;
+        $quote->author = $request->author;
+        if($quote->save()) {
+            $quote = Quote::with('comments')->find($quote->id);
+            return $this->defaultJsonResponse(true, "Quote Created", "The quote has created successfully",[], $quote, 201);
+        };
+        
     }
 
     /**
