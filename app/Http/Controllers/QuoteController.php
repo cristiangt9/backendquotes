@@ -14,8 +14,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        $quotes = Quote::all();
-
+        $quotes = Quote::with('comments')->get();
         return $this->defaultJsonResponse(true, "All quotes", "All quotes", [], $quotes);
     }
 

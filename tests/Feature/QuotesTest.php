@@ -26,10 +26,11 @@ class QuotesTest extends TestCase
                 ->has('title')
                 ->has('message')
                 ->has('messages')
+                ->has('code')
                 ->has('data', 2)
-                ->has('data', function ($jsonData) {
-                    $jsonData->has('0.comments', 4);
-                    $jsonData->has('1.comments', 4);
+                ->has('data', function (AssertableJson $jsonData) {
+                    $jsonData->has('0.comments', 4)
+                    ->has('1.comments', 4);
                 });
         });
     }
@@ -54,6 +55,7 @@ class QuotesTest extends TestCase
                 ->has('title')
                 ->has('message')
                 ->has('messages')
+                ->has('code')
                 ->has('data', function ($jsonData) {
                     $jsonData
                         ->has("id", 3)
@@ -77,6 +79,7 @@ class QuotesTest extends TestCase
                 ->has('title')
                 ->has('message')
                 ->has('messages')
+                ->has('code')
                 ->has('data', function ($jsonData) {
                     $jsonData
                         ->has("id", 1)
