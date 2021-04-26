@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class CommentsTest extends TestCase
 {
+    use RefreshDatabase, DatabaseMigrations;
     /**
      * @test
      */
@@ -39,7 +40,7 @@ class CommentsTest extends TestCase
             [
                 'comment' =>
                 [
-                    "text" => "this is a comment",
+                    "text" => "this is a comment4",
                     "quote_id" => "1"
                 ]
             ]
@@ -55,7 +56,7 @@ class CommentsTest extends TestCase
                     $jsonData->has('comments', 5)
                     ->has('comments.4', function ($jsonComment) {
                         $jsonComment->has("id")
-                                    ->where("text", "this is a comment")
+                                    ->where("text", "this is a comment4")
                                     ->where("quote_id", "1");
                     });
                 });
