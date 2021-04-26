@@ -15,19 +15,16 @@ class CommentsTest extends TestCase
      */
     public function whenIndexWasRequiredGetAllTheComments()
     {
-
-        $response = $this->get('/comments/allOfQuote?quote_id=1');
-
-        $response->assertStatus(200);
+        $this->seed();
+        $response = $this->get('/comments?quote_id=1');
         $response->assertJson(function (AssertableJson $json) {
             $json
                 ->has('success')
                 ->has('title')
                 ->has('message')
                 ->has('messages')
-                ->has('data', function ($jsonData) {
-                    $jsonData->has('comments', 4);
-                });
+                ->where('code', 200)
+                ->has('data', 4);
         });
     }
     /**
@@ -35,6 +32,7 @@ class CommentsTest extends TestCase
      */
     public function whenACommentWasSendedSaveTheCommentAndReturnAllTheCommentsOfTheQuote()
     {
+        $this->seed();
         $response = $this->post(
             '/comments',
             [

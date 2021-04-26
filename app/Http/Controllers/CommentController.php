@@ -12,9 +12,17 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $comments = Comment::query();
+        $title = "All Comments";
+        if($request->has('quote_id')){
+            $comments = $comments->where("quote_id", $request->quote_id);
+            $title .= " of quote_id: ".$request->quote_id;
+        }
+        $comments = $comments->get();
+
+        return $this->defaultJsonResponse(true, $title, "Comments found", null, $comments);
     }
 
     /**
